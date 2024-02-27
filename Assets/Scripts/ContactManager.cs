@@ -88,7 +88,7 @@ public class ContactManager : MonoBehaviour
 
     public void UnlockChat()
     {
-        if (passwordInputField.text == "pw")
+        if (passwordInputField.text == "0203")
         {
 
             passwordInputField.text = "";

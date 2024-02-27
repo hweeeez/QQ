@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     private SpriteRenderer _spriteRender;
     private int dotCount = 0;
-    [SerializeField] GameObject winGameObject;
+    public bool ateAll = false;
 
     private void Start()
     {
@@ -54,10 +54,11 @@ public class PlayerController : MonoBehaviour
 
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(h, v);
 
-        if (dotCount >= 135)
+        if (dotCount >= 137)
         {
-            winGameObject.SetActive(true);
+            ateAll = true;
         }
+        Debug.Log(dotCount);
     }
     void OnTriggerEnter2D(Collider2D collider)
     {

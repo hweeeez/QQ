@@ -13,6 +13,7 @@ public class PUN2_Chat : MonoBehaviourPun
     [SerializeField] private TMP_InputField chatInputField;
     [SerializeField] private GameObject SMSIncoming;
     [SerializeField] private GameObject SMSOutgoing;
+    [SerializeField] private GameObject chatWindowParent;
     [SerializeField] private ContactManager contactManager;
     public Transform chatWindow;
 
@@ -75,17 +76,26 @@ public class PUN2_Chat : MonoBehaviourPun
                 if (chatMessages[i].sender != PhotonNetwork.LocalPlayer.NickName)
                 {
                     GameObject textBox = Instantiate(SMSIncoming, chatWindow);
-                    textBox.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = chatMessages[i].message;
+                    textBox.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = chatMessages[i].message;
                     chatMessages.RemoveAt(i);
                 }
                 else
                 {
                     GameObject textBox = Instantiate(SMSOutgoing, chatWindow);
-                    textBox.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = chatMessages[i].message;
+                    textBox.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = chatMessages[i].message;
                     chatMessages.RemoveAt(i);
                 }
+                LayoutRebuilder.ForceRebuildLayoutImmediate(chatWindowParent.GetComponent<RectTransform>());
+                StartCoroutine(ScrollToBottom());
             }
         }
+    }
+
+    IEnumerator ScrollToBottom()
+    {
+        yield return new WaitForEndOfFrame();
+        chatWindowParent.GetComponent<ScrollRect>().verticalNormalizedPosition = 0;
+
     }
 
     void SendMessage()
@@ -93,7 +103,7 @@ public class PUN2_Chat : MonoBehaviourPun
 
         if (chatInputField.text != "")
         {
-            isChatting = false;
+            //isChatting = false;
             if (chatInput.Replace(" ", "") != "")
             {
                 //Send message
