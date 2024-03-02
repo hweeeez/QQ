@@ -12,10 +12,16 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer _spriteRender;
     private int dotCount = 0;
     public bool ateAll = false;
+    int numberOfDotsToEat;
+    public bool canMove;
 
     private void Start()
     {
         _spriteRender = gameObject.GetComponent<SpriteRenderer>();
+        GameObject dotsParent = GameObject.Find("DotsParent");
+        numberOfDotsToEat = dotsParent.transform.childCount;
+        ateAll = false;
+        canMove = true;
     }
     void Update()
     {
@@ -25,40 +31,45 @@ public class PlayerController : MonoBehaviour
         float v = moveVertical * speed;
         Vector2 currentVelocity = gameObject.GetComponent<Rigidbody2D>().velocity;
         //float newVelocityX = 0f;
+        if (canMove)
+        {
+            if (moveHorizontal < 0) // press left and stationary or moving left
+            {
+                //newVelocityX = -speed;
+                rb.AddForce(-Vector2.right * speed);
+            }
+            else if (moveHorizontal > 0) // press right and stationary or movin
+            {
+                //newVelocityX = speed;
+                rb.AddForce(Vector2.right * speed);
+            }
+            else
+            {
+                //newVelocityX = 0;
+            }
+            //float newVelocityY = 0f;
+            if (moveVertical < 0)
+            {
+                //newVelocityY = -speed;
+                rb.AddForce(Vector2.down * speed);
+            }
+            else if (moveVertical > 0)
+            {
+                //newVelocityY = speed;
+                rb.AddForce(Vector2.up * speed);
+            }
 
-        if (moveHorizontal < 0) // press left and stationary or moving left
-        {
-            //newVelocityX = -speed;
-            rb.AddForce(-Vector2.right * speed);
-        }
-        else if (moveHorizontal > 0) // press right and stationary or movin
-        {
-            //newVelocityX = speed;
-            rb.AddForce(Vector2.right * speed);
+            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(h, v);
         }
         else
         {
-            //newVelocityX = 0;
-        }
-        //float newVelocityY = 0f;
-        if (moveVertical < 0)
-        {
-            //newVelocityY = -speed;
-            rb.AddForce(Vector2.down * speed);
-        }
-        else if (moveVertical > 0)
-        {
-            //newVelocityY = speed;
-            rb.AddForce(Vector2.up * speed);
+            gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         }
 
-        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(h, v);
-
-        if (dotCount >= 137)
+        if (dotCount >= numberOfDotsToEat)
         {
             ateAll = true;
         }
-        Debug.Log(dotCount);
     }
     void OnTriggerEnter2D(Collider2D collider)
     {

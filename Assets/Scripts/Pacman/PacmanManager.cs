@@ -12,7 +12,7 @@ public class PacmanManager : MonoBehaviour
     [SerializeField] GameObject pacmanPrefab;
     [SerializeField] GameObject pauseMenu;
     [SerializeField] TMP_Text timerText;
-    public float timer = 11;
+    private float timer = 40;
     bool timerIsRunning;
 
     void Start()
@@ -61,10 +61,13 @@ public class PacmanManager : MonoBehaviour
             if (player.GetComponent<PlayerController>().ateAll && timer >= 0)
             {
                 winGameObject.SetActive(true);
+                player.GetComponent<PlayerController>().canMove = false;
+                timerIsRunning = false;
             }
             if (!player.GetComponent<PlayerController>().ateAll && timer == 0)
             {
                 loseGameObject.SetActive(true);
+                player.GetComponent<PlayerController>().canMove = false;
             }
         }
     }
@@ -81,7 +84,7 @@ public class PacmanManager : MonoBehaviour
             Destroy(pacmanGame.transform.GetChild(0).gameObject);
         }
         Instantiate(pacmanPrefab, pacmanGame.transform);
-        timer = 30;
-        timerIsRunning = true;
+        timer = 40;
+        timerIsRunning = false;
     }
 }
